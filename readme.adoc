@@ -1,0 +1,12 @@
+= GraalVM ocp_pick 
+
+== procedure
+
+-----
+$ mvn help:describe -Dplugin=com.oracle.substratevm:native-image-maven-plugin -Ddetail
+$ mvn clean package
+$ mvn clean package -Dnative.skip=true
+$ java -jar target/ocp_pick-1.0.jar
+$ ./target/ocp_pick
+
+-----
