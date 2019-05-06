@@ -3,8 +3,11 @@ package com.ratwater.jbride;
 public class OCPENV {
 
     public static final String AWS="aws";
+    public static final String AWS_MASTER_PREFIX="master.";
+    public static final int AWS_MASTER_PORT=443;
     public static final String RAVELLO="ravello";
     public static final String RAVELLO_MASTER_PREFIX="master00-";
+    public static final int RAVELLO_MASTER_PORT=443;
 
     private String type = AWS;
     private String guid = null;

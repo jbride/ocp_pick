@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -45,7 +46,7 @@ public class OCPick {
             iStream = p.getInputStream();
             String commandOutput = IOUtil.toString(iStream);
             
-            log.info("testOC() commandOutput = " + commandOutput);
+            System.out.println("testOC() commandOutput = " + commandOutput);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -116,11 +117,11 @@ public class OCPick {
     }
     
     private static void readAndValidateYaml() {
-        log.info("main() app version = " + version);
+        System.out.println("app version = " + version);
         File yamlFile = new File(yamlConfigPath);
         if (!yamlFile.exists())
             throw new RuntimeException("readAndValidateYaml() the following file does not exist: " + yamlConfigPath);
-        log.info("determineVariables() yaml file to parse = " + yamlConfigPath);
+        System.out.println("yaml file to parse = " + yamlConfigPath);
         
         FileInputStream yamlReader = null;
         OCPENVs yamlValues = null;
@@ -143,7 +144,7 @@ public class OCPick {
             envMap.put(yamlObj.getGuid(), yamlObj);
             sBuilder.append("\n\t" + yamlObj.toString());
         }
-        log.info(sBuilder.toString());
+        System.out.println(sBuilder.toString());
     }
 
     private static String promptForGuid() {
@@ -158,7 +159,7 @@ public class OCPick {
                 guid = null;
             } else {
                 OCPENV ocpEnv = envMap.get(guid);
-                log.info("\nWill login to the following OCP env: " + ocpEnv.toString());
+                System.out.println("\nWill login to the following OCP env: " + ocpEnv.toString());
             }
         }
         try {
@@ -176,15 +177,18 @@ public class OCPick {
 
         // 1)  Determine URL to OCP Master
         String url = null;
+        int port=0;
         if(ocpEnv.getType().equals(OCPENV.AWS)){
-            url = "master."+guid+"."+ocpEnv.getSubdomainBase();
+            url = OCPENV.AWS_MASTER_PREFIX+guid+"."+ocpEnv.getSubdomainBase();
+            port = OCPENV.AWS_MASTER_PORT;
         } else if(ocpEnv.getType().equals(OCPENV.RAVELLO)){
             url = OCPENV.RAVELLO_MASTER_PREFIX+guid+"."+ocpEnv.getSubdomainBase();
+            port = OCPENV.RAVELLO_MASTER_PORT;
         } else {
             throw new RuntimeException("Unknown OCP environment type: "+ocpEnv.getType());
         }
         lCommand.append(url);
-        testConnectivityToMaster(url);
+        testConnectivityToMaster(url, port);
 
 
         // 2)  Add userId and passwd
@@ -195,7 +199,7 @@ public class OCPick {
             lCommand.append(" -u "+ ocpEnv.getUserId());
             lCommand.append(" -p "+ ocpEnv.getUserPasswd());
         }
-        log.info("\nlogin command = "+lCommand);
+        System.out.println("\nlogin command = "+lCommand);
 
         InputStream iStream = null;
         try {
@@ -203,7 +207,7 @@ public class OCPick {
             iStream = p.getInputStream();
             String commandOutput = IOUtil.toString(iStream);
 
-            log.info("\n login Successful; response = " + commandOutput);
+            System.out.println("\n login Successful; response = " + commandOutput);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {
@@ -213,7 +217,15 @@ public class OCPick {
 
     }
 
-    private static void testConnectivityToMaster(String url) {
-
+    private static void testConnectivityToMaster(String host, int port) {
+        Socket s = null;
+        try {
+            s = new Socket(host, port);
+        } catch (Exception e) {
+            throw new RuntimeException("The following network address is not available: "+host+":"+port);
+        } finally {
+            if (s != null)
+                try { s.close(); } catch (Exception e) {}
+        }
     }
 }
