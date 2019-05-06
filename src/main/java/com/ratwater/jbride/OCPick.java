@@ -69,10 +69,14 @@ public class OCPick {
     }
     
     private static void dumpHelp() {
-        StringBuilder sBuilder = new StringBuilder("OC_PICK Help:");
-        sBuilder.append("\n\n\t"+YAML_CONFIG_PATH_ARG+" : Path to yaml formatted data file containing one or more OCP environments.");
+        StringBuilder sBuilder = new StringBuilder("NAME\n\tOCP Pick");
+        sBuilder.append("\n\nUSAGE\n\tocp_pick [options]");
+        sBuilder.append("\n\nDESCRIPTION\n\tSelect from mulitple OCP environments to log into.");
+        sBuilder.append("\n\nOPTIONS");
+        sBuilder.append("\n\n\t"+YAML_CONFIG_PATH_ARG+"\t\tPath to yaml formatted data file containing one or more OCP environments.");
         sBuilder.append("\n\t\t\t Default path = "+ yamlConfigPath);
-        sBuilder.append("\n\t"+VERSION_ARG+" \t: OC_Pick version");
+        sBuilder.append("\n\t"+VERSION_ARG+"\t\tOC_Pick version");
+        sBuilder.append("\n\t"+HELP_ARG+"\t\tHelp");
         sBuilder.append("\n\n");
         System.out.println(sBuilder.toString());
     }
@@ -202,8 +206,10 @@ public class OCPick {
         if(ocpEnv.isLoginAsAdmin()){
             lCommand.append(" -u "+ ocpEnv.getAdminUserId());
             lCommand.append(" -p "+ ocpEnv.getAdminPasswd());
-        }else {
-            lCommand.append(" -u "+ ocpEnv.getUserId());
+        }else {  ocpMajorVersion: v3
+
+            lCo  ocpMajorVersion: v3
+
             lCommand.append(" -p "+ ocpEnv.getUserPasswd());
         }
         System.out.println("\nlogin command = "+lCommand);
