@@ -34,26 +34,11 @@ public class OCPick {
         determineVariables(args);
         readAndValidateYaml();
         String guid = promptForGuid();
-        testOC();
+        testOC(guid);
         login(guid);
     }
     
-    private static void testOC() {
-        
-        InputStream iStream = null;
-        try {
-            Process p = Runtime.getRuntime().exec("oc version");
-            iStream = p.getInputStream();
-            String commandOutput = IOUtil.toString(iStream);
-            
-            System.out.println("testOC() commandOutput = " + commandOutput);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (iStream != null)
-            try { iStream.close();  } catch (IOException e) { e.printStackTrace(); }
-        }
-    }
+
     
     private static void determineVariables(String args[]) {
         
@@ -169,6 +154,28 @@ public class OCPick {
             e.printStackTrace();
         }
         return guid;
+    }
+
+    private static void testOC(String guid) {
+        
+        InputStream iStream = null;
+        try {
+            Process p = Runtime.getRuntime().exec("oc version");
+            iStream = p.getInputStream();
+            String commandOutput = IOUtil.toString(iStream);
+
+            OCPENV ocpEnv = envMap.get(guid);
+            if(StringUtils.isNotEmpty(commandOutput) && commandOutput.contains(ocpEnv.getOcpMajorVersion())) {
+                System.out.println("testOC() commandOutput = " + commandOutput);
+            } else {
+                throw new RuntimeException("Expected oc client version: "+ocpEnv.getOcpMajorVersion()+". Instead, response of 'oc version' is: \n"+commandOutput);
+            }          
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } finally {
+            if (iStream != null)
+            try { iStream.close();  } catch (IOException e) { e.printStackTrace(); }
+        }
     }
 
     private static void login(String guid) {

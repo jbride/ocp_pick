@@ -8,6 +8,9 @@ public class OCPENV {
     public static final String RAVELLO="ravello";
     public static final String RAVELLO_MASTER_PREFIX="master00-";
     public static final int RAVELLO_MASTER_PORT=443;
+    public static final String OCP_VERSION_3="v3";
+    public static final String OCP_VERSION_4="v4";
+
 
     private String type = AWS;
     private String guid = null;
@@ -17,6 +20,7 @@ public class OCPENV {
     private String adminPasswd = null;
     private String userId = "user1";
     private String userPasswd = null;
+    private String ocpMajorVersion = OCP_VERSION_3;
 
     public String getType() {
         return type;
@@ -65,6 +69,12 @@ public class OCPENV {
     }
     public void setUserPasswd(String x) {
 		userPasswd = x;
+    }
+    public String getOcpMajorVersion() {
+		return ocpMajorVersion;
+    }
+    public void setOcpMajorVersion(String x) {
+		ocpMajorVersion = x;
 	}
     public String toString() {
         return "OCPEnv [guid=" + guid + ", adminUserId=" + adminUserId + ", loginAsAdmin=" + loginAsAdmin

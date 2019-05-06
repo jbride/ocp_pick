@@ -2,14 +2,15 @@
 #   Populate as needed as per every potential environment you may want to connect to at different times
 #   Every environment consists of the following variales:
 #
-#   guid:           String;   required;   no default value
-#   subdomainBase:  String;   required;   default value = openshift.opentlc.com
-#   type:           String;   required;   default value = "aws"; alternatives are: ravello
-#   loginAsAdmin:   boolean;  optional;   default value = false
-#   userId:         String;   optional;   will be used if loginAsAdmin == false
-#   userPasswd:     String;   optional;   will be used if loginAsAdmin == false
-#   adminUserId:    String;   optional;   will be used if loginAsAdmin == true;   default value = opentlc-mgr
-#   adminPasswd:    String;   optional;   will be used if loginAsAdmin == true;
+#   guid:               String;   required;   no default value
+#   subdomainBase:      String;   required;   default value = openshift.opentlc.com
+#   type:               String;   required;   default value = "aws"; alternatives are: ravello
+#   loginAsAdmin:       boolean;  optional;   default value = false
+#   userId:             String;   optional;   will be used if loginAsAdmin == false
+#   userPasswd:         String;   optional;   will be used if loginAsAdmin == false
+#   adminUserId:        String;   optional;   will be used if loginAsAdmin == true;   default value = opentlc-mgr
+#   adminPasswd:        String;   optional;   will be used if loginAsAdmin == true;
+#   ocpMajorVersion:    String;   optional;   default = v3; options are either v3 or v4
 
 ocpEnvs:
 
@@ -26,6 +27,7 @@ ocpEnvs:
   adminPasswd: 'xxxx'
   userId: ocp1
   userPasswd: 'xxxx'
+  ocpMajorVersion: v4
 
 - guid: 5678
   type: ravello
