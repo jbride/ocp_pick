@@ -3,8 +3,8 @@
 #   Every environment consists of the following variales:
 #
 #   guid:               String;   required;   no default value
-#   subdomainBase:      String;   required;   default value = openshift.opentlc.com
 #   type:               String;   required;   default value = "aws"; alternatives are: ravello
+#   subdomainBase:      String;   optional;   default value = openshift.opentlc.com
 #   loginAsAdmin:       boolean;  optional;   default value = false
 #   userId:             String;   optional;   will be used if loginAsAdmin == false
 #   userPasswd:         String;   optional;   will be used if loginAsAdmin == false

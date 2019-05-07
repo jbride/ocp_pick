@@ -12,16 +12,15 @@ import java.util.Properties;
 import java.util.Scanner;
 import org.codehaus.plexus.util.IOUtil;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 public class OCPick {
-    private static Logger log = LoggerFactory.getLogger("OCPick");
+
     private static final String YAML_CONFIG_PATH_ENV = "YAML_CONFIG_PATH_ENV";
     private static final String YAML_CONFIG_PATH_ARG = "--config_path=";
     private static final String HELP_ARG = "--h";
     private static final String VERSION_ARG = "--version";
+    private static final String GUID_ARG = "--guid=";
     private static final String DEFAULT_CONFIG_FILE_NAME = ".ocp_env_details.yaml";
     private static final String APP_VERSION = "app_version";
     private static String version = "0.0";
@@ -31,23 +30,29 @@ public class OCPick {
     
     public static void main(String args[]) {
         readAppProps();
-        determineVariables(args);
+        String guid = parseArgsAndEnvVariables(args);
         readAndValidateYaml();
-        String guid = promptForGuid();
+        if(StringUtils.isEmpty(guid)) {
+            promptForGuid();
+        }
         testOC(guid);
         login(guid);
     }
     
 
-    
-    private static void determineVariables(String args[]) {
+    /**
+     * parseArgsAndEnvVariables
+     *   - returns guid if passed as a command line argument
+    */
+    private static String parseArgsAndEnvVariables(String args[]) {
         
         String currentUsersHomeDir = System.getProperty("user.home");
         yamlConfigPath = currentUsersHomeDir + File.separator + DEFAULT_CONFIG_FILE_NAME;
 
+        String guid = null;
         if (args.length > 0) {
             for (int x = 0; x < args.length; x++) {
-                log.debug("determineVariables() arg = " + args[x]);
+                
                 if(args[x].startsWith(HELP_ARG)) {
                     dumpHelp();
                     System.exit(0);
@@ -56,16 +61,19 @@ public class OCPick {
                     System.exit(0);
                 } else if (args[x].startsWith(YAML_CONFIG_PATH_ARG)) {
                     yamlConfigPath = args[x].substring(14);
+                } else if(args[x].startsWith(GUID_ARG)) {
+                    guid = args[x].substring(7);
                 } else {
-                    log.error("Unknown command line arg: "+args[x]);
+                    System.out.println("Unknown command line arg: "+args[x]);
                     dumpHelp();
                     System.exit(1);
                 }
             }
         }
         if (!StringUtils.isEmpty(System.getenv(YAML_CONFIG_PATH_ENV))) {
-          yamlConfigPath = System.getenv(YAML_CONFIG_PATH_ENV);
+            yamlConfigPath = System.getenv(YAML_CONFIG_PATH_ENV);
         }
+        return guid;
     }
     
     private static void dumpHelp() {
@@ -144,7 +152,7 @@ public class OCPick {
             System.out.println(promptString);
             guid = iScanner.next();
             if (envMap.get(guid) == null) {
-                log.error("Nothing known about OCP env with GUID "+guid+" in: " + yamlConfigPath);
+                System.out.println("Nothing known about OCP env with GUID "+guid+" in: " + yamlConfigPath);
                 guid = null;
             } else {
                 OCPENV ocpEnv = envMap.get(guid);
@@ -170,7 +178,7 @@ public class OCPick {
 
             OCPENV ocpEnv = envMap.get(guid);
             if(StringUtils.isNotEmpty(commandOutput) && commandOutput.contains(ocpEnv.getOcpMajorVersion())) {
-                System.out.println("testOC() commandOutput = " + commandOutput);
+                //System.out.println("testOC() commandOutput = " + commandOutput);
             } else {
                 throw new RuntimeException("Expected oc client version: "+ocpEnv.getOcpMajorVersion()+". Instead, response of 'oc version' is: \n"+commandOutput);
             }          
@@ -206,10 +214,8 @@ public class OCPick {
         if(ocpEnv.isLoginAsAdmin()){
             lCommand.append(" -u "+ ocpEnv.getAdminUserId());
             lCommand.append(" -p "+ ocpEnv.getAdminPasswd());
-        }else {  ocpMajorVersion: v3
-
-            lCo  ocpMajorVersion: v3
-
+        }else { 
+            lCommand.append(" -u "+ocpEnv.getUserId());
             lCommand.append(" -p "+ ocpEnv.getUserPasswd());
         }
         System.out.println("\nlogin command = "+lCommand);
