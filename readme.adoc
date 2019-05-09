@@ -13,13 +13,24 @@ This utility provides assistance with login to one of many possible OpenShift Co
 . Download the latest release of this utility and place in a location on your $PATH:
 +
 -----
-$ curl 
+$ curl -L https://github.com/jbride/ocp_pick/releases/download/v.1/ocp_pick -o $HOME/bin/ocp_pick \
+       && chmod 755 $HOME/bin/ocp_pick
 -----
+
+. This _ocp_pick_ utility reads a configuration file (in yaml format) of all of your OCP environments.
++
+Download an example config file :
++
+-----
+$ curl https://raw.githubusercontent.com/jbride/ocp_pick/v.1/src/test/resources/ocp_env_details.yaml -o $HOME/ocp_env_details.yml
+-----
+
+. Edit this _$HOME/ocp_env_details.yml_ configuration file as necessary
 
 . View the help:
 +
 -----
-$ oc_pick --help
+$ ocp_pick --help
 -----
 
 

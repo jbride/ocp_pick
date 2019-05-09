@@ -18,7 +18,7 @@ public class OCPick {
 
     private static final String YAML_CONFIG_PATH_ENV = "YAML_CONFIG_PATH_ENV";
     private static final String YAML_CONFIG_PATH_ARG = "--config_path=";
-    private static final String HELP_ARG = "--h";
+    private static final String HELP_ARG = "--help";
     private static final String VERSION_ARG = "--version";
     private static final String GUID_ARG = "--guid=";
     private static final String DEFAULT_CONFIG_FILE_NAME = ".ocp_env_details.yaml";
@@ -81,10 +81,10 @@ public class OCPick {
         sBuilder.append("\n\nUSAGE\n\tocp_pick [options]");
         sBuilder.append("\n\nDESCRIPTION\n\tSelect from mulitple OCP environments to log into.");
         sBuilder.append("\n\nOPTIONS");
+        sBuilder.append("\n\t"+HELP_ARG+"\t\t\tHelp");
         sBuilder.append("\n\n\t"+YAML_CONFIG_PATH_ARG+"\t\tPath to yaml formatted data file containing one or more OCP environments.");
-        sBuilder.append("\n\t\t\t Default path = "+ yamlConfigPath);
+        sBuilder.append("\n\t\t\t\t\tDefault path = "+ yamlConfigPath);
         sBuilder.append("\n\t"+VERSION_ARG+"\t\tOC_Pick version");
-        sBuilder.append("\n\t"+HELP_ARG+"\t\tHelp");
         sBuilder.append("\n\n");
         System.out.println(sBuilder.toString());
     }
