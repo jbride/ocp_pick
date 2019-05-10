@@ -1,4 +1,6 @@
-= GraalVM ocp_pick 
+= ocp_pick 
+
+:numbered:
 
 == Purpose
 Do you often need to switch across many different OpenShift environments ?
