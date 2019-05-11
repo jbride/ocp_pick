@@ -14,6 +14,7 @@ public class OCPENV {
 
     private String type = AWS;
     private String guid = null;
+    private String purpose = null;
     private String subdomainBase = "openshift.opentlc.com";
     private boolean loginAsAdmin = false;
     private String adminUserId = "opentlc-mgr";
@@ -33,6 +34,12 @@ public class OCPENV {
     }
     public void setGuid(String guid) {
         this.guid = guid;
+    }
+    public String getPurpose() {
+        return purpose;
+    }
+    public void setPurpose(String purpose) {
+        this.purpose = purpose;
     }
     public String getSubdomainBase() {
         return subdomainBase;
@@ -77,7 +84,7 @@ public class OCPENV {
 		ocpMajorVersion = x;
 	}
     public String toString() {
-        return "OCPEnv [guid=" + guid + ", adminUserId=" + adminUserId + ", loginAsAdmin=" + loginAsAdmin
-                + ", userId=" + userId + ", type=" + type + ", subdomainBase=" +subdomainBase + "]";
+        return "OCPEnv [guid=" + guid + ", purpose= "+purpose+", loginAsAdmin=" + loginAsAdmin
+                + ", type=" + type + "]";
     }
 }

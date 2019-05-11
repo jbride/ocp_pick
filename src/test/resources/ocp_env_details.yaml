@@ -4,6 +4,7 @@
 #
 #   guid:               String;   required;   no default value
 #   type:               String;   required;   default value = "aws"; alternatives are: ravello
+#   purpose:            String;   optional;   remind yourself of the purpose of this OCP environment
 #   subdomainBase:      String;   optional;   default value = openshift.opentlc.com
 #   loginAsAdmin:       boolean;  optional;   default value = false
 #   userId:             String;   optional;   will be used if loginAsAdmin == false
@@ -15,12 +16,14 @@
 ocpEnvs:
 
 - guid: na311
+  purpose: "shared elab cluster; NA AWS"
   type: aws
   loginAsAdmin: false
   userId: 'xxxx'
   userPasswd: 'xxxx'
 
 - guid: 1234 
+  purpose: "China 3scale ILT; APAC AWS"
   type: aws
   loginAsAdmin: true
   adminUserId: gpte-mgr
