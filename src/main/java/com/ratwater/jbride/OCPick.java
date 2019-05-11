@@ -33,7 +33,7 @@ public class OCPick {
         String guid = parseArgsAndEnvVariables(args);
         readAndValidateYaml();
         if(StringUtils.isEmpty(guid)) {
-            promptForGuid();
+            guid = promptForGuid();
         }
         testOC(guid);
         login(guid);
@@ -42,7 +42,7 @@ public class OCPick {
 
     /**
      * parseArgsAndEnvVariables
-     *   - returns guid if passed as a command line argument
+     *   - returns optional guid if passed as a command line argument
     */
     private static String parseArgsAndEnvVariables(String args[]) {
         
@@ -177,6 +177,8 @@ public class OCPick {
             String commandOutput = IOUtil.toString(iStream);
 
             OCPENV ocpEnv = envMap.get(guid);
+            if(ocpEnv == null)
+                throw new RuntimeException("Unknown guid:  "+guid);
             if(StringUtils.isNotEmpty(commandOutput) && commandOutput.contains(ocpEnv.getOcpMajorVersion())) {
                 //System.out.println("testOC() commandOutput = " + commandOutput);
             } else {
