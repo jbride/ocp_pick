@@ -14,6 +14,17 @@ import org.codehaus.plexus.util.IOUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.yaml.snakeyaml.Yaml;
 
+/**
+ * Possible alternatives to SnakeYaml:
+ *   1)  YamlBean: 
+ *           - https://github.com/EsotericSoftware/yamlbeans
+ *           - Makes use of reflection
+ *   2)  Jackson Yaml Module:  
+ *           - https://github.com/FasterXML/jackson-dataformats-text/tree/master/yaml
+ *           - Jackson wrapper around SnakeYaml
+ *
+ */
+
 public class OCPick {
 
     private static final String YAML_CONFIG_PATH_ENV = "YAML_CONFIG_PATH_ENV";
