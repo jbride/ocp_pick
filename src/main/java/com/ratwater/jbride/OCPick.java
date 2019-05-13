@@ -231,6 +231,10 @@ public class OCPick {
             lCommand.append(" -u "+ocpEnv.getUserId());
             lCommand.append(" -p "+ ocpEnv.getUserPasswd());
         }
+
+        // 3)  Avoid prompt to accept self signed certs
+        lCommand.append(" --insecure-skip-tls-verify=true");
+
         System.out.println("\nlogin command = "+lCommand);
 
         InputStream iStream = null;
