@@ -24,16 +24,15 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
       <artifactId>snakeyaml</artifactId>
       <version>1.23</version>
     </dependency>
+
+    <!-- StringUtils -->
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
       <version>3.8.1</version>
     </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-      <version>2.1</version>
-    </dependency>
+
+    <!-- IOUtils -->
     <dependency>
       <groupId>org.codehaus.plexus</groupId>
       <artifactId>plexus-utils</artifactId>
@@ -78,6 +77,7 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
               <skip>${native.skip}</skip>
 
               <!-- as per: https://royvanrijn.com/blog/2018/09/part-2-native-microservice-in-graalvm/#results-->
+              <!-- buildArgs>-H:IncludeResources=.*.properties|.*META-INF/persistence.xml|.*.xsd -H:ReflectionConfigurationFiles=classes/graal.json</buildArgs -->
               <buildArgs>-H:IncludeResources=.*.properties|.*META-INF/persistence.xml|.*.xsd</buildArgs>
 
             </configuration>
