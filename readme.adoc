@@ -45,6 +45,9 @@ $ ocp_pick --help
 . Change directory into this project
 
 === Native executable
+
+==== Use Maven plugin
+
 . Build a java artifact and compile to a native executable:
 +
 -----
@@ -64,13 +67,15 @@ You can optionaly view the details of this plugin as follows:
 $ mvn help:describe -Dplugin=com.oracle.substratevm:native-image-maven-plugin -Ddetail
 -----
 
-=== Java byecode executable:
+===== Use _native-image_ executable:
 
 -----
 $ mvn clean package -Dnative.skip=true
-$ java -jar target/ocp_pick-1.0.jar
 -----
 
+-----
+$ native-image -cp /u02/maven/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar:/u02/maven/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar:/u02/maven/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar:/u01/other/ocp_pick/target/ocp_pick-1.0.jar -H:IncludeResources='.*.properties|.*META-INF/persistence.xml|.*.xsd' -H:DelayClassInitialization='org.yaml.snakeyaml.introspector.PropertyUtils' -H:Class=com.ratwater.jbride.OCPick -H:Name=target/ocp_pick
+-----
 
 -----
 Warning: Reflection method java.lang.Class.forName invoked at org.yaml.snakeyaml.constructor.Constructor.getClassForName(Constructor.java:655)
@@ -86,3 +91,12 @@ Warning: Reflection method java.lang.Class.getDeclaredFields invoked at org.yaml
 Warning: Abort stand-alone image build due to reflection use without configuration.
 Warning: Use -H:+ReportExceptionStackTraces to print stacktrace of underlying exception
 -----
+
+=== Java byecode executable:
+
+-----
+$ mvn clean package -Dnative.skip=true
+$ java -jar target/ocp_pick-1.0.jar
+-----
+
+

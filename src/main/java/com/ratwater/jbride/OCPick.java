@@ -44,8 +44,8 @@ public class OCPick {
         readAppProps();
         String guid = parseArgsAndEnvVariables(args);
 
-        //readAndValidateYamlUsingSnakeYaml();
-        readAndValidateYaml();
+        readAndValidateYamlUsingSnakeYaml();
+        //readAndValidateYaml();
 
         if(StringUtils.isEmpty(guid)) {
             guid = promptForGuid();
