@@ -6,7 +6,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Scanner;
@@ -24,7 +26,6 @@ import org.yaml.snakeyaml.Yaml;
  *           - Jackson wrapper around SnakeYaml
  *
  */
-
 public class OCPick {
 
     private static final String YAML_CONFIG_PATH_ENV = "YAML_CONFIG_PATH_ENV";
@@ -42,7 +43,10 @@ public class OCPick {
     public static void main(String args[]) {
         readAppProps();
         String guid = parseArgsAndEnvVariables(args);
+
+        //readAndValidateYamlUsingSnakeYaml();
         readAndValidateYaml();
+
         if(StringUtils.isEmpty(guid)) {
             guid = promptForGuid();
         }
@@ -123,8 +127,9 @@ public class OCPick {
         Properties pros = System.getProperties();
         pros.list(System.out);
     }
-    
-    private static void readAndValidateYaml() {
+  
+    // Makes use of SnakeYaml library 
+    private static void readAndValidateYamlUsingSnakeYaml() {
         System.out.println("app version = " + version);
         File yamlFile = new File(yamlConfigPath);
         if (!yamlFile.exists())
@@ -154,6 +159,28 @@ public class OCPick {
         }
         System.out.println(sBuilder.toString());
     }
+
+    private static void readAndValidateYaml() {
+        System.out.println("app version = " + version);
+        File yamlFile = new File(yamlConfigPath);
+        if (!yamlFile.exists())
+            throw new RuntimeException("readAndValidateYaml() the following file does not exist: " + yamlConfigPath);
+        System.out.println("yaml file to parse = " + yamlConfigPath);
+        
+        FileInputStream yamlReader = null;
+        List<OCPENV> ocpEnvs = new ArrayList<OCPENV>();
+        OCPENVs yamlValues = new OCPENVs();
+        yamlValues.setOcpEnvs(ocpEnvs);
+
+        envMap = new HashMap<String, OCPENV>();
+        StringBuilder sBuilder = new StringBuilder("\nYAML objects = ");
+        for (OCPENV yamlObj : yamlValues.getOcpEnvs()) {
+            envMap.put(yamlObj.getGuid(), yamlObj);
+            sBuilder.append("\n\t" + yamlObj.toString());
+        }
+        System.out.println(sBuilder.toString());
+    }
+    
 
     private static String promptForGuid() {
         String promptString = "\nWhich of the following OCP environments would you like to connect to ? (Please specify the GUID): \n\n";
