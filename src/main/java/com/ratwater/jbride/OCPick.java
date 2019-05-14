@@ -45,7 +45,6 @@ public class OCPick {
         String guid = parseArgsAndEnvVariables(args);
 
         readAndValidateYamlUsingSnakeYaml();
-        //readAndValidateYaml();
 
         if(StringUtils.isEmpty(guid)) {
             guid = promptForGuid();
@@ -159,28 +158,6 @@ public class OCPick {
         }
         System.out.println(sBuilder.toString());
     }
-
-    private static void readAndValidateYaml() {
-        System.out.println("app version = " + version);
-        File yamlFile = new File(yamlConfigPath);
-        if (!yamlFile.exists())
-            throw new RuntimeException("readAndValidateYaml() the following file does not exist: " + yamlConfigPath);
-        System.out.println("yaml file to parse = " + yamlConfigPath);
-        
-        FileInputStream yamlReader = null;
-        List<OCPENV> ocpEnvs = new ArrayList<OCPENV>();
-        OCPENVs yamlValues = new OCPENVs();
-        yamlValues.setOcpEnvs(ocpEnvs);
-
-        envMap = new HashMap<String, OCPENV>();
-        StringBuilder sBuilder = new StringBuilder("\nYAML objects = ");
-        for (OCPENV yamlObj : yamlValues.getOcpEnvs()) {
-            envMap.put(yamlObj.getGuid(), yamlObj);
-            sBuilder.append("\n\t" + yamlObj.toString());
-        }
-        System.out.println(sBuilder.toString());
-    }
-    
 
     private static String promptForGuid() {
         String promptString = "\nWhich of the following OCP environments would you like to connect to ? (Please specify the GUID): \n\n";
