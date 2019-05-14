@@ -76,9 +76,11 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
               <imageName>ocp_pick</imageName>
               <skip>${native.skip}</skip>
 
-              <!-- as per: https://royvanrijn.com/blog/2018/09/part-2-native-microservice-in-graalvm/#results-->
-              <!-- buildArgs>-H:IncludeResources=.*.properties|.*META-INF/persistence.xml|.*.xsd -H:ReflectionConfigurationFiles=classes/graal.json</buildArgs -->
-              <buildArgs>-H:IncludeResources=.*.properties|.*META-INF/persistence.xml|.*.xsd</buildArgs>
+              <!-- as per: 
+                      1) https://royvanrijn.com/blog/2018/09/part-2-native-microservice-in-graalvm/#results 
+                      2) https://github.com/oracle/graal/blob/master/substratevm/REFLECTION.md
+                -->
+              <buildArgs>-H:IncludeResources=.*.properties|.*META-INF/persistence.xml|.*.xsd -H:ReflectionConfigurationFiles=classes/graal.json</buildArgs>
 
             </configuration>
           </execution>

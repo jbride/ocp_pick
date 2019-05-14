@@ -23,6 +23,9 @@ public class OCPENV {
     private String userPasswd = null;
     private String ocpMajorVersion = OCP_VERSION_3;
 
+    public OCPENV() {
+    }
+
     public String getType() {
         return type;
     }

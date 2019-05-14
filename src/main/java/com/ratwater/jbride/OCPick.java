@@ -270,7 +270,7 @@ public class OCPick {
             iStream = p.getInputStream();
             String commandOutput = IOUtil.toString(iStream);
 
-            System.out.println("\n login Successful; response = " + commandOutput);
+            System.out.println("\n Login response = " + commandOutput);
         } catch (IOException e) {
             throw new RuntimeException(e);
         } finally {

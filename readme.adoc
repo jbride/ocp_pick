@@ -5,17 +5,20 @@
 == Purpose
 Do you often need to switch across many different OpenShift environments ?
 
-In doing so, do you often struggle recollecting what user to log into as ?
+In doing so, do you often struggle recollecting what user to log in as ?
+Or what the URL to the master node of your OCP environment is ?
 Or what version of link:https://mirror.openshift.com/pub/openshift-v3/clients/?C=M;O=D[oc utility] to use ?
 
-This utility provides assistance with login to one of many possible OpenShift Container Platform environments that you may have access to.
+This utility provides assistance with login to one of many possible OpenShift Container Platform environments so that you can more easily switch between them.
 
 == Usage
 
 . Download the latest release of this utility and place in a location on your $PATH:
 +
 -----
-$ curl -L https://github.com/jbride/ocp_pick/releases/download/v.1/ocp_pick -o $HOME/bin/ocp_pick \
+$ release='v.2'
+
+$ curl -L https://github.com/jbride/ocp_pick/releases/download/$release/ocp_pick -o $HOME/bin/ocp_pick \
        && chmod 755 $HOME/bin/ocp_pick
 -----
 
@@ -24,10 +27,10 @@ $ curl -L https://github.com/jbride/ocp_pick/releases/download/v.1/ocp_pick -o $
 Download an example config file :
 +
 -----
-$ curl https://raw.githubusercontent.com/jbride/ocp_pick/v.1/src/test/resources/ocp_env_details.yaml -o $HOME/ocp_env_details.yml
+$ curl https://raw.githubusercontent.com/jbride/ocp_pick/$release/src/test/resources/ocp_env_details.yaml -o $HOME/.ocp_env_details.yml
 -----
 
-. Edit this _$HOME/ocp_env_details.yml_ configuration file as necessary
+. Edit this _$HOME/.ocp_env_details.yml_ configuration file as necessary
 
 . View the help:
 +
@@ -35,18 +38,16 @@ $ curl https://raw.githubusercontent.com/jbride/ocp_pick/v.1/src/test/resources/
 $ ocp_pick --help
 -----
 
-
-
 == Build and use from source
 
-. Ensure link:https://www.oracle.com/technetwork/graalvm/downloads/index.html[GraalVM]  is installed and its _java_ and _javac_ utilities are in your $PATH
+. Ensure link:https://www.oracle.com/technetwork/graalvm/downloads/index.html[GraalVM]  is installed and its _java_ and _javac_ utilities are on your $PATH
 . Ensure Maven 3.5 (or more recent) is installed.
 . Clone this git repo
 . Change directory into this project
 
 === Native executable
 
-==== Use Maven plugin
+==== Use Maven plugin to build native executable
 
 . Build a java artifact and compile to a native executable:
 +
@@ -67,29 +68,14 @@ You can optionaly view the details of this plugin as follows:
 $ mvn help:describe -Dplugin=com.oracle.substratevm:native-image-maven-plugin -Ddetail
 -----
 
-===== Use _native-image_ executable:
+===== Use _native-image_ utility to build native executable:
 
 -----
 $ mvn clean package -Dnative.skip=true
 -----
 
 -----
-$ native-image -cp /u02/maven/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar:/u02/maven/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar:/u02/maven/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar:/u01/other/ocp_pick/target/ocp_pick-1.0.jar -H:IncludeResources='.*.properties|.*META-INF/persistence.xml|.*.xsd' -H:DelayClassInitialization='org.yaml.snakeyaml.introspector.PropertyUtils' -H:Class=com.ratwater.jbride.OCPick -H:Name=target/ocp_pick
------
-
------
-Warning: Reflection method java.lang.Class.forName invoked at org.yaml.snakeyaml.constructor.Constructor.getClassForName(Constructor.java:655)
-Warning: Reflection method java.lang.Class.forName invoked at org.yaml.snakeyaml.constructor.Constructor.getClassForName(Constructor.java:653)
-Warning: Reflection method java.lang.Class.getConstructor invoked at org.yaml.snakeyaml.constructor.Constructor$ConstructScalar.constructStandardJavaInstance(Constructor.java:433)
-Warning: Reflection method java.lang.Class.getDeclaredConstructor invoked at org.yaml.snakeyaml.constructor.BaseConstructor.newInstance(BaseConstructor.java:302)
-Warning: Reflection method java.lang.Class.getDeclaredConstructor invoked at org.yaml.snakeyaml.constructor.Constructor$ConstructScalar.construct(Constructor.java:385)
-Warning: Reflection method java.lang.Class.getDeclaredConstructor invoked at org.yaml.snakeyaml.TypeDescription.newInstance(TypeDescription.java:387)
-Warning: Reflection method java.lang.Class.getDeclaredConstructors invoked at org.yaml.snakeyaml.constructor.Constructor$ConstructSequence.construct(Constructor.java:529)
-Warning: Reflection method java.lang.Class.getDeclaredConstructors invoked at org.yaml.snakeyaml.constructor.Constructor$ConstructScalar.construct(Constructor.java:356)
-Warning: Reflection method java.lang.Class.getDeclaredFields invoked at org.yaml.snakeyaml.introspector.PropertyUtils.getPropertiesMap(PropertyUtils.java:97)
-Warning: Reflection method java.lang.Class.getDeclaredFields invoked at org.yaml.snakeyaml.introspector.PropertyUtils.getPropertiesMap(PropertyUtils.java:71)
-Warning: Abort stand-alone image build due to reflection use without configuration.
-Warning: Use -H:+ReportExceptionStackTraces to print stacktrace of underlying exception
+$ native-image -cp /u02/maven/org/yaml/snakeyaml/1.23/snakeyaml-1.23.jar:/u02/maven/org/apache/commons/commons-lang3/3.8.1/commons-lang3-3.8.1.jar:/u02/maven/org/codehaus/plexus/plexus-utils/1.1/plexus-utils-1.1.jar:/u01/other/ocp_pick/target/ocp_pick-1.0.jar -H:IncludeResources='.*.properties|.*META-INF/persistence.xml|.*.xsd' -H:ReflectionConfigurationFiles=target/classes/graal.json -H:Class=com.ratwater.jbride.OCPick -H:Name=target/ocp_pick
 -----
 
 === Java byecode executable:
