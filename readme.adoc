@@ -13,6 +13,12 @@ This utility provides assistance with login to one of many possible OpenShift Co
 
 == Usage
 
+. Install `libxcrypt-compat` package:
++
+-----
+$ sudo dnf install -y libxcrypt-compat
+-----
+
 . Download the latest release of this utility and place in a location on your $PATH:
 +
 -----
